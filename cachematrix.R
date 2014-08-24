@@ -4,31 +4,24 @@
 ## Write a short comment describing this function
 
 makeCacheMatrix <- function(x = matrix()) {
-	## Initialize the inverse property
-    i <- NULL
+	  
+    ## Initialize the inverse matrix
+    inv <- NULL
 
-    ## Method to set the matrix
-    set <- function( matrix ) {
-            m <<- matrix
-            i <<- NULL
+    ## Set the matrix
+    set <- function(y) {
+            x <<- y
+            inv <<- NULL
     }
 
-    ## Method the get the matrix
-    get <- function() {
-    	## Return the matrix
-    	m
-    }
+    ## Get the original matrix
+    get <- function() x
 
-    ## Method to set the inverse of the matrix
-    setInverse <- function(inverse) {
-        i <<- inverse
-    }
+    ## Set the inverse of the matrix
+    setInverse <- function(inverse) inv <<- inverse
 
-    ## Method to get the inverse of the matrix
-    getInverse <- function() {
-        ## Return the inverse property
-        i
-    }
+    ## Get the inverse of the matrix
+    getInverse <- function() inv
 
     ## Return a list of the methods
     list(set = set, get = get,
@@ -40,24 +33,25 @@ makeCacheMatrix <- function(x = matrix()) {
 ## Write a short comment describing this function
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-         m <- x$getInverse()
+      
+      ## Check if the inverse matrix has been calculated
+      inv <- x$getInverse()
 
-	    ## Just return the inverse if its already set
-	    if( !is.null(m) ) {
+	    ## Return the inverse if its already set
+	    if(!is.null(inv)) {
 	            message("getting cached data")
-	            return(m)
+	            return(inv)
 	    }
 
-	    ## Get the matrix from our object
+	    ## Get the original matrix from our object
 	    data <- x$get()
 
-	    ## Calculate the inverse using matrix multiplication
-	    m <- solve(data) %*% data
+	    ## Calculate the inverse
+	    inv <- solve(data, ...) %*% data
 
 	    ## Set the inverse to the object
-	    x$setInverse(m)
+	    x$setInverse(inv)
 
-	    ## Return the matrix
-	    m
+	    ## Return the inverse matrix
+	    inv
 }
